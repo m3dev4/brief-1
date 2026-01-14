@@ -254,7 +254,12 @@ def transaction_history():
         if not entry["transaction_history"]:
             print("Aucune transaction disponible")
 
-        print(entry["transaction_history"])
+        print("Historique des transactions:")
+        for transaction, element in enumerate(entry["transaction_history"], start=1):
+            print(
+                f"{transaction}. Date: {element['date']}, Beneficiaire: {element['recipient']}, Montant: {element['montant']} FcFa"
+            )
+            
 
 
 ussd_code()
