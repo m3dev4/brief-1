@@ -1,8 +1,28 @@
 [
     {
-        "balance": 2445,
+        "balance": 197550,
         "secret_code": 1234,
-        "transfert": 555,
-        "transaction": 5000
+        "transaction": 12450,
+        "last_transaction": 1000,
+        "transaction_history": [
+            {
+                "id": "862ab530-5be8-4bf3-be16-cc8b2f022946",
+                "date": "2026-01-14",
+                "recipient": "774542514",
+                "montant": 250
+            },
+            {
+                "id": "e7bfd015-15aa-4fd5-baef-7864c375e650",
+                "date": "2026-01-14",
+                "recipient": "774562514",
+                "montant": 200
+            },
+            {
+                "id": "51e455a1-220c-44c4-9224-3082288fc008",
+                "date": "2026-01-14",
+                "recipient": "775411248",
+                "montant": 1000
+            }
+        ]
     }
 ]
