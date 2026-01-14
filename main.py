@@ -34,6 +34,7 @@ def ussd_code():
                 print("Invalid USSD code. Please try again.")
                 continue
         break
+        
 
 
 # Function du menu OM
@@ -72,7 +73,6 @@ def menu_om():
             case _:
                 print("Invalid choice. Please try again.")
                 continue
-        break
 
 
 # Function pour afficher le solde
@@ -94,6 +94,7 @@ def display_balance():
 
 # function pour acheter un forfait
 def menu_forfait():
+
     clearTerminal()
     print("Acheter du forfait")
     while True:
@@ -185,13 +186,15 @@ def sending_money():
 
                 entry["balance"] -= montant
                 entry["transaction"] += montant
-                entry["last_transaction"] = montant
+                entry["last_transaction"] = (montant,)
+                entry["last_transaction_id"] = transaction_id
                 entry["transaction_history"].append(
                     {
                         "id": transaction_id,
                         "date": dateTransaction,
                         "recipient": recipient_number,
                         "montant": montant,
+                        "statut": "reussi",
                     }
                 )
 
@@ -213,7 +216,9 @@ def cancel_transfer():
     for entry in data:
         transfert = entry.get("last_transaction")
         if not transfert or transfert == 0:
+            print("-------------------------------------------------")
             print("Aucun transfert n'a été éffectuer")
+            print("-------------------------------------------------")
             return
 
     message = "Vous êtes sur le point d'annuler un transfert d'argent. \n1. Confirmer \n2. Annuler\nchoix:"
@@ -227,9 +232,17 @@ def cancel_transfer():
                 for entry in data:
                     my_solde = entry["balance"]
                     montant_transfert = entry.get("last_transaction", 0)
-                    new_solde = my_solde + montant_transfert
+                    new_solde = my_solde + sum(montant_transfert)
                     entry["balance"] = new_solde
+
+                    last_id = entry.get("last_transaction_id")
+                    for transaction in entry["transaction_history"]:
+                        if transaction["id"] == last_id:
+                            transaction["statut"] = "annule"
+                            break
+
                     entry["last_transaction"] = 0
+                    entry["last_transaction_id"] = None
                     print(entry)
                     with open(DATA_FILE, "w", encoding="utf-8") as file:
                         json.dump(data, file, indent=4)
@@ -257,9 +270,8 @@ def transaction_history():
         print("Historique des transactions:")
         for transaction, element in enumerate(entry["transaction_history"], start=1):
             print(
-                f"{transaction}. Date: {element['date']}, Beneficiaire: {element['recipient']}, Montant: {element['montant']} FcFa"
+                f"{transaction}. Date: {element['date']}, Beneficiaire: {element['recipient']}, Montant: {element['montant']} FcFa, Statut: [{element["statut"]}]"
             )
-            
 
 
 ussd_code()
